@@ -1,3 +1,15 @@
+let Score = document.querySelector("#score")
+
+let Result = document.querySelector("#result")
+
+let allbtn = document.querySelector("#allbtn");
+
+// using bubbling in element to set one listener
+allbtn.addEventListener('click', function(event) {
+  playGame(event.target.id)
+});
+
+// getComputerChoice()
 function getComputerChoice() {
   let COMChoice
   let choice = Math.floor(Math.random() * 10) + 1
@@ -15,57 +27,49 @@ function getComputerChoice() {
     return COMChoice
   }
 }
-// getComputerChoice()
-function getHumanChoice() {
-  let Hchoice = prompt("pls enter Rock or Paper or Scissors");
-  Hchoice = Hchoice.toLowerCase()
-  console.log(Hchoice)
-  return Hchoice
-}
-// getHumanChoice()
-function playGame() {
-  let humanScore = 0
-  let computerScore = 0
-  //Set Scores
-  function playRound(humanChoice, computerChoice) { //for comparing and know the winner
-    if (humanChoice === computerChoice) {
-      console.log("It is tie")
-    } else if (humanChoice === "rock" && computerChoice === "scissors") {
-      console.log(`You win ${humanChoice} beat ${computerChoice}`)
-      return humanScore += 1
-    } else if (humanChoice === "paper" && computerChoice === "rock") {
-      console.log(`You win ${humanChoice} beat ${computerChoice}`)
-      return humanScore += 1
-    } else if (humanChoice === "scissors" && computerChoice === "paper") {
-      console.log(`You win ${humanChoice} beat ${computerChoice}`)
-      return humanScore += 1
+
+// set scores
+let humanScore = 0
+let computerScore = 0
+
+function playGame(humanChoice, computerChoice) {
+  const computerSelection = getComputerChoice();
+  if (humanChoice !== "rock" && humanChoice !== "paper" && humanChoice !== "scissors") {
+    return Result.textContent = "ERORR"
+  }
+  //for comparing and know the winner
+  if (humanChoice === computerSelection) {
+    Result.textContent = "It is tie"
+  } else if (humanChoice === "rock" && computerSelection === "scissors") {
+    Result.textContent = `You win ${humanChoice} beat ${computerSelection}`
+    humanScore += 1
+    } else if (humanChoice === "paper" && computerSelection === "rock") {
+      Result.textContent = `You win ${humanChoice} beat ${computerSelection}`
+      humanScore += 1
+    } else if (humanChoice === "scissors" && computerSelection === "paper") {
+      Result.textContent = `You win ${humanChoice} beat ${computerSelection}`
+      humanScore += 1
+      
     } else {
-      console.log(`You lost ${computerChoice} beat ${humanChoice}`)
-      return computerScore += 1
+      Result.textContent = `You lost ${computerSelection} beat ${humanChoice}`
+      computerScore += 1
     }
-  }
-  
-  for (i = 0; i < 5; i++) {
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
-    playRound(humanSelection, computerSelection);
-    if (i === 4) { //this is for showing the result and winner
-      if (humanScore > computerScore) {
-        console.log("COM: " + computerScore)
-        console.log("Human: " + humanScore)
-        console.log("You Win The Game!!!!")
+    
+    if (computerScore === 5 || humanScore === 5) { //For run the game after 5 score
+    //this is for showing the final result and winner
+    if (humanScore > computerScore) {
+        Result.textContent = `You Win The Game!!!! ${humanScore} to ${computerScore}`
       } else if (humanScore === computerScore) {
-        console.log("COM: " + computerScore)
-        console.log("Human: " + humanScore)
-        console.log("You Draw with Computer")
+        Result.textContent = `You Draw with Computer ${humanScore} to ${computerScore}`
       } else {
-        console.log("COM: " + computerScore)
-        console.log("Human: " + humanScore)
-        console.log("Sorry You Lost The Game")
+        Result.textContent = `Sorry You Lost The Game ${computerScore} to ${humanScore}`
       }
-    } 
+      reset() // to reset the game
+    }
+    function reset() {
+      humanScore = 0
+      computerScore = 0
+    }
+    //to set scores
+    Score.textContent = `Player Score: ${humanScore} //// Com Score: ${computerScore}`
   }
-  //For run the game 5 times
-}
-//To run the game
-playGame()
